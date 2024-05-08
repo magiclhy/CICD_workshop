@@ -1,0 +1,63 @@
+name: CI/CD Pipeline for Golang Application
+
+on:
+  push:
+    branches:
+      - 'release/v[0-9]+.[0-9]+'
+    paths-ignore:
+      - '**.md'
+  commit_message:
+    ignore: '#NORUN*'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.18'
+      
+      - name: Scan for Vulnerabilities
+        id: scan
+        run: |
+          # Run your vulnerability scan script here
+          echo "Mock: No vulnerabilities found"
+          echo "::set-output name=status::success"
+      
+      - name: Slack Notification on Failure
+        if: steps.scan.outputs.status == 'failure'
+        uses: slackapi/slack-github-action@v1.19.0
+        with:
+          slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+          channel-id: 'B070U8S8AMA'
+          attachments: '[{"pretext": "Vulnerabilities found!", "text": "Details here..."}]'
+        env:
+          SLACK_BOT_TOKEN: xoxb-6957628588181-7028297010820-T9Ltevs8E59VkmCYZzrORrJi
+      
+      - name: Build Docker Image
+        if: steps.scan.outputs.status == 'success'
+        run: docker build -t fred/go-fortune:${{ github.sha }} .
+      
+      - name: Login to DockerHub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+      
+      - name: Push Image to DockerHub
+        run: docker push fred/go-fortune:${{ github.sha }}
+      
+      - name: Sign Docker Image
+        run: echo "Image signing simulated"
+      
+      - name: Slack Notification on Success
+        uses: slackapi/slack-github-action@v1.19.0
+        with:
+          slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
+          channel-id: 'B070B7XUDAB'
+          attachments: '[{"pretext": "CI/CD Pipeline Succeeded", "text": "Name: Your Name\nMatriculation Number: Your Matric Number\nEmail: Your Email\nRepository: ${{ github.server_url }}/${{ github.repository }}\nDocker Hub URL: https://hub.docker.com/r/fred/go-fortune:${{ github.sha }}"}]'
+        env:
+          SLACK_BOT_TOKEN: xoxb-6957628588181-7028297010820-T9Ltevs8E59VkmCYZzrORrJi
+
+
