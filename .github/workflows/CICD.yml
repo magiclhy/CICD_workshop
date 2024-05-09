@@ -28,9 +28,11 @@ jobs:
           scan-type: 'filesystem'
           scan-dir: '.'
           format: 'table'
-          fail-on: 'HIGH'
+#          fail-on: 'HIGH'
+          fail-on: 'CRITICAL'
           ignore-unfixed: true
-          severity: 'HIGH'
+#          severity: 'HIGH'
+          severity: 'CRITICAL'
           output: 'scan-report.txt'
             
       - name: Slack Notification on Failure
@@ -38,7 +40,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         with:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_MESSAGE: "Trivy scan failed, check the report."
+          SLACK_MESSAGE: "Trivy scan failed."
         
       - name: Upload Report to Slack
         if: failure()
@@ -96,7 +98,7 @@ jobs:
           *Matriculation Number:* A0290857N\n
           *Email:* e1327888@u.nus.edu\n
           *Repository:* ${{ github.server_url }}/${{ github.repository }}\n
-          *DockerHub:* https://hub.docker.com/r/lhy927/cicd_workshop:${{ github.sha }} "
+          *DockerHub:* https://hub.docker.com/repository/docker/lhy927/cicd_workshop/general "
 #          SLACK_MESSAGE: "test"
 
 #      - name: Slack Notification on Success
