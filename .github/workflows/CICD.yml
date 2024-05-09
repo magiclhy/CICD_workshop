@@ -23,7 +23,7 @@ jobs:
       
       - name: Scan for Vulnerabilities
         id: trivy_scan
-        uses: aquasecurity/trivy-action@main
+        uses: aquasecurity/trivy-action@master
         with:
           scan-type: 'filesystem'
           scan-dir: '.'
