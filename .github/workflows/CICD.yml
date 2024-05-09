@@ -81,13 +81,14 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_MESSAGE: "
-          *Image build & signed*\n
-          *Name:* \n
-          *Matriculation:* AAAAAAAA\n
-          *Email:* \n
-          *Git:* \n
-          *Docker:* "
+#          SLACK_MESSAGE: "
+#          *Image build & signed*\n
+#          *Name:* \n
+#          *Matriculation:* AAAAAAAA\n
+#          *Email:* \n
+#          *Git:* \n
+#          *Docker:* "
+          SLACK_MESSAGE: "test"
 
 #      - name: Slack Notification on Success
 #        if: success()
