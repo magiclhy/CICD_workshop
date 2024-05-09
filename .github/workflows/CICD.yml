@@ -38,7 +38,7 @@ jobs:
       - name: Slack Notification on Failure
         if: failure()
         uses: rtCamp/action-slack-notify@v2
-        with:
+        env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_MESSAGE: "Trivy scan failed."
         
@@ -50,6 +50,9 @@ jobs:
           file-path: 'scan-report.txt'
           channels: ${{ secrets.SLACK_CHANNEL_ID }}
 
+      - name: Prepare QEMU
+        uses: docker/setup-qemu-action@v3
+      
       - name: Build Docker Image
 #        if: steps.trivy_scan.outputs.result == 'success'
         if: success()
@@ -62,17 +65,17 @@ jobs:
         run: docker push lhy927/cicd_workshop:${{ github.sha }}
 
       - name: Install Cosign
-        if: steps.trivy_scan.outputs.result == 'success'
+        if: success()
         uses: sigstore/cosign-installer@main
       
       - name: Generate cosign key pair
-        if: steps.trivy_scan.outputs.result == 'success'
+        if: success()
         run: cosign generate-key-pair
         env:
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
 
       - name: Sign Docker Image
-        if: steps.trivy_scan.outputs.result == 'success'
+        if: success()
         run: |
           echo "${{ secrets.COSIGN_PRIVATE_KEY }}" > cosign.key
           cosign sign --key cosign.key lhy927/cicd_workshop:${{ github.sha }}
