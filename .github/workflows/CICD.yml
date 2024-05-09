@@ -28,11 +28,11 @@ jobs:
           scan-type: 'filesystem'
           scan-dir: '.'
           format: 'table'
-#          fail-on: 'HIGH'
-          fail-on: 'CRITICAL'
+          fail-on: 'CRITICAL, HIGH'
+#          fail-on: 'CRITICAL'
           ignore-unfixed: true
-#          severity: 'HIGH'
-          severity: 'CRITICAL'
+          severity: 'CRITICAL, HIGH'
+#          severity: 'CRITICAL'
           output: 'scan-report.txt'
             
       - name: Slack Notification on Failure
