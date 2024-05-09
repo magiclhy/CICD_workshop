@@ -28,10 +28,10 @@ jobs:
           scan-type: 'filesystem'
           scan-dir: '.'
           format: 'table'
-          fail-on: 'CRITICAL, HIGH'
+          fail-on: 'MEDIUM'
 #          fail-on: 'CRITICAL'
           ignore-unfixed: true
-          severity: 'CRITICAL, HIGH'
+          severity: 'MEDIUM'
 #          severity: 'CRITICAL'
           output: 'scan-report.txt'
             
@@ -87,15 +87,6 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
-#          SLACK_MESSAGE: |
-#              [{
-#                pretext: CI/CD Pipeline Succeeded
-#                "text": "Name: Li, Hongyi
-#                Matriculation Number: A0290857N
-#                Email: e1327888@u.nus.edu
-#                Repository: ${{ github.server_url }}/${{ github.repository }}
-#                Docker Hub URL: https://hub.docker.com/r/lhy927/cicd_workshop:${{ github.sha }}
-#              }]
           SLACK_MESSAGE: "
           *Image build & signed*\n
           *Name:* Li, Hongyi\n
