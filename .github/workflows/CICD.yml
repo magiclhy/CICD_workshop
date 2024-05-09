@@ -50,7 +50,7 @@ jobs:
           file-path: 'scan-report.txt'
           channels: ${{ secrets.SLACK_CHANNEL_ID }}
 
-      - name: Prepare QEMU
+      - name: Set QEMU
         uses: docker/setup-qemu-action@v3
       
       - name: Build Docker Image
@@ -68,11 +68,11 @@ jobs:
         if: success()
         uses: sigstore/cosign-installer@main
       
-      - name: Generate cosign key pair
-        if: success()
-        run: cosign generate-key-pair
-        env:
-          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+#      - name: Generate cosign key pair
+#        if: success()
+#        run: cosign generate-key-pair
+#        env:
+#          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
 
       - name: Sign Docker Image
         if: success()
@@ -81,6 +81,7 @@ jobs:
           cosign sign --key cosign.key lhy927/cicd_workshop:${{ github.sha }}
         env:
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+      
       - name: Slack Notification - Success
         if: success()
         uses: rtCamp/action-slack-notify@v2
