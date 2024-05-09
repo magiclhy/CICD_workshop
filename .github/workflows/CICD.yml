@@ -49,7 +49,8 @@ jobs:
           channels: ${{ secrets.SLACK_CHANNEL_ID }}
 
       - name: Build Docker Image
-        if: steps.trivy_scan.outputs.result == 'success'
+#        if: steps.trivy_scan.outputs.result == 'success'
+        if: success()
         run: docker build -t lhy927/cicd_workshop:${{ github.sha }} .
       
       - name: Login to DockerHub
