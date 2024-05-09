@@ -6,8 +6,8 @@ on:
       - 'release/v[0-9]+.[0-9]+'
     paths-ignore:
       - '**.md'
-  commit_message:
-    ignore: '#NORUN*'
+#  commit_message:
+#    ignore: '#NORUN*'
 
 jobs:
   build-and-deploy:
