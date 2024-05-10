@@ -105,3 +105,12 @@ jobs:
 #          attachments: '[{"pretext": "CI/CD Pipeline Succeeded", "text": "Name: Li, Hongyi\nMatriculation Number: A0290857N\nEmail: e1327888@u.nus.edu\nRepository: ${{ github.server_url }}/${{ github.repository }}\nDocker Hub URL: https://hub.docker.com/r/lhy927/cicd_workshop:${{ github.sha }}"}]'
         
 
+      - name: Conditional Workflow Skip
+        if: success()
+        run: |
+          COMMIT_MSG="${{ github.event.head_commit.message }}"
+          if [[ "$COMMIT_MSG" =~ ^#NORUN ]]; then
+            echo "Workflow skipped due to #NORUN in commit message."
+            exit 78
+          else
+            echo "Workflow proceeding as normal."
