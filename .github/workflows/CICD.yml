@@ -40,7 +40,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_MESSAGE: "Trivy scan failed."
+          SLACK_MESSAGE: "Trivy scan failed, please check the report."
         
       - name: Upload Report to Slack
         if: failure()
